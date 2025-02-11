@@ -52,13 +52,16 @@ fun main() {
 
     // Obtener la lista de estaciones meteorológicas
     val listaEstacionsMeteo = root.listaEstacionsMeteo
+        .sortedByDescending { it.altitude }
+        .take(20)
 
 
     // Imprimir las estaciones meteorológicas
-    println("Lista de estaciones meteorológicas de Meteogalicia:")
+    println("20 estaciones meteorológicas de Meteogalicia (Ordenado por Altitude):")
+    println()
     listaEstacionsMeteo.forEach { listaEstacionMeteo ->
         println(
-            "Altitude: ${listaEstacionMeteo.altitude}, " +
+            " - Altitude: ${listaEstacionMeteo.altitude}, " +
                     "Concello: ${listaEstacionMeteo.concello}, " +
                     "Estación meteorológica: ${listaEstacionMeteo.estacion}, " +
                     "Id Estación: ${listaEstacionMeteo.idEstacion}, " +
@@ -68,6 +71,50 @@ fun main() {
                     "UTMX: ${listaEstacionMeteo.utmx}, " +
                     "UTMY: ${listaEstacionMeteo.utmy}"
         )
+    }
+
+    println()
+    println("-------------------------------------------------------")
+    println()
+
+    println("10 primeras estaciones cuya ID empieza por 10 (Ordenado por ID):")
+    println()
+    val estacionesConId10 = listaEstacionsMeteo.filter { it.idEstacion.toString().startsWith("10") }
+        .sortedBy { it.idEstacion }
+        .take(10)
+
+    estacionesConId10.forEach { estacion ->
+        println(
+            " - Id Estación: ${estacion.idEstacion}, " +
+                    "Concello: ${estacion.concello}, " +
+                    "Provincia: ${estacion.provincia}, " +
+                    "Estación meteorológica: ${estacion.estacion}, " +
+                    "Altitude: ${estacion.altitude}, " +
+                    "Latitud: ${estacion.lat}, " +
+                    "Longitud: ${estacion.lon}, "
+        )
+    }
+
+    println()
+    println("-------------------------------------------------------")
+    println()
+
+    println("Estaciones agrupadas por provincia (Ordenado por Provincia):")
+    val estacionesAgrupadasPorProvincia = listaEstacionsMeteo
+        .sortedBy { it.concello }
+        .groupBy { it.provincia }
+
+    estacionesAgrupadasPorProvincia.forEach { (provincia, estaciones) ->
+        println()
+        println("Provincia: $provincia (${estaciones.size} estaciones)")
+        estaciones.forEach { estacion ->
+            println(
+                "  - Estación: ${estacion.estacion}, " +
+                        "Id Estación: ${estacion.idEstacion}, " +
+                        "Concello: ${estacion.concello}, " +
+                        "Latitud: ${estacion.lat}, Longitud: ${estacion.lon}"
+            )
+        }
     }
 }
 
